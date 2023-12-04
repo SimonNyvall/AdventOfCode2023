@@ -1,49 +1,52 @@
 module day3
 
-open System
-open System.IO
-open System.Text.RegularExpressions
+let input =
+    System.IO.File.ReadAllLines $"""input/input3.txt"""
+    |> List.ofSeq
 
-let puzzleInput =
+let example =
     """467..114..
-...*......
-..35..633.
-......#...
-617*......
-.....+.58.
-..592.....
-......755.
-...$.*....
-.664.598.."""
-        .Split('\n')
+    ...*......
+    ..35..633.
+    ......#...
+    617*......
+    .....+.58.
+    ..592.....
+    ......755.
+    ...$.*....
+    .664.598.."""
+        .Split("\n")
     |> Array.map (fun s -> s.Trim())
-    |> Array.toSeq
+    |> List.ofSeq
+
+type Location = int * int
 
 type Entry =
     | Digit of string
     | Symbol of char
     | Empty
 
-let parse =
-    function
-    | c when System.Char.IsDigit(c) -> Digit(c |> string)
-    | '.' -> Empty
-    | c -> Symbol c
+let parse input =
+    let parseCharacter =
+        function
+        | c when System.Char.IsDigit(c) -> Digit(c |> string)
+        | '.' -> Empty
+        | c -> Symbol c
 
-let parsed =
-    [ for (rownum, line) in puzzleInput |> Seq.indexed do
-          [ for (colnum, character) in line |> Seq.indexed -> (colnum, rownum), parse character ] ]
+    let parsed =
+        [ for (rownum, line) in input |> Seq.indexed do
+              [ for (colnum, character) in line |> Seq.indexed -> (colnum, rownum), parseCharacter character ] ]
 
-type Location = int * int
+    parsed
 
-type Bundles =
+type Bundle =
     | Empty
-    | Number of int
     | Symbol of char
+    | Number of int
 
 let digit (Digit d) = d
 
-let rec bundle (line: (Location * Entry) list) : (Location list * Bundles) list =
+let rec bundle (line: (Location * Entry) list) : (Location list * Bundle) list =
     match line with
     | [] -> []
     | (_, Digit _) :: t ->
@@ -61,54 +64,66 @@ let rec bundle (line: (Location * Entry) list) : (Location list * Bundles) list 
             |> List.map (snd >> digit)
             |> String.concat ""
             |> int
-
-        let number =
-            bundled
-            |> List.map (snd >> digit)
-            |> String.concat ""
-            |> int
             |> Number
 
         let locations = bundled |> List.map fst
 
-        (locations, number) :: (rest |> bundle)
+        (locations, number) :: (bundle rest)
     | (pos, otherwise) :: t ->
         let entry =
             match otherwise with
-            | Entry.Empty -> ([ pos ], Bundles.Empty)
-            | Entry.Symbol c -> ([ pos ], Bundles.Symbol c)
+            | Entry.Empty -> ([ pos ], Bundle.Empty)
+            | Entry.Symbol s -> ([ pos ], Bundle.Symbol s)
 
-        entry :: (t |> bundle)
+        entry :: (bundle t)
 
-
-let bundled = parsed |> List.collect bundle
-
-
-let numbers =
+let numbers bundled =
     bundled
     |> List.choose (fun (loc, d) ->
         match d with
-        | Number d -> Some(d, loc)
+        | Number n -> Some(n, loc)
         | _ -> None)
 
-
-let symbols =
+let symbols bundled =
     bundled
-    |> List.choose (fun (loc, d) ->
+    |> List.filter (fun (loc, d) ->
         match d with
-        | Symbol s -> Some(s, loc)
-        | _ -> None)
+        | Symbol _ -> true
+        | _ -> false)
 
+let hasNeighbourIn locations (x, y) =
+    let neighbs =
+        [ (x - 1, y - 1)
+          (x, y - 1)
+          (x + 1, y - 1)
+          (x - 1, y)
+          (x + 1, y)
+          (x - 1, y + 1)
+          (x, y + 1)
+          (x + 1, y + 1) ]
 
-let symbolLocations = symbols |> List.collect fst
+    (Set.intersect (Set.ofList neighbs) (Set.ofList locations))
+    |> Set.isEmpty
+    |> not
 
+let isPartNumber symbolLocations (_, locations) =
+    locations
+    |> List.exists (hasNeighbourIn symbolLocations)
 
-let isPartNumber symbols (number, locations) = true
+let solve input =
+    let bundled = input |> parse |> List.collect bundle
+    let symbolss = symbols bundled
+    let symbolLocations = symbolss |> List.collect fst
+    let numberss = numbers bundled
 
+    let partNumbers =
+        numberss
+        |> List.filter (isPartNumber symbolLocations)
 
-let partNumber =
-    number
-    |> List.filter (isPartNumber symbolLocations)
+    let result = partNumbers |> List.sumBy fst
+    result
+
+solve input
 
 // .....
 // .633.
