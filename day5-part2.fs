@@ -167,7 +167,7 @@ let calculateLowestLocation (maps: Maps) (seedRanges: (int64 * int64) list) : in
     lowestLocation
 
 let parseSeedRanges (input: string list) : (int64 * int64) list =
-    let seedLine = input |> List.head // Assuming the first line contains the seed info
+    let seedLine = input |> List.head
 
     let seedParts =
         seedLine.Split([| ' '; ':' |], StringSplitOptions.RemoveEmptyEntries)
