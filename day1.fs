@@ -9,6 +9,7 @@ let readtextfile =
     |> Array.skip 1
     |> Array.rev
 
+
 let findDigits (line: string) =
     let digits = line.ToCharArray() |> Array.filter Char.IsDigit
 
@@ -17,6 +18,7 @@ let findDigits (line: string) =
     | 1 -> Some(digits.[0], digits.[0])
     | _ -> Some(digits.[0], digits.[digits.Length - 1])
 
+
 let parseLine (line: string) =
     match findDigits line with
     | Some (firstDigit, lastDigit) ->
@@ -24,8 +26,9 @@ let parseLine (line: string) =
         + int (string lastDigit)
     | None -> 0
 
+
 let parseAndSum fileLines =
     fileLines |> Array.map parseLine |> Array.sum
 
-let totalSum = readtextfile |> parseAndSum
-totalSum
+
+let solve = readtextfile |> parseAndSum

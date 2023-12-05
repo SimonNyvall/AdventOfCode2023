@@ -3,10 +3,12 @@ module Day4.Part1
 open System
 open System.IO
 
+
 type Card =
     { CardIndex: string
       WinningNumbers: int list
       GivenNumbers: int list }
+
 
 type IntersectionCard =
     { CardIndex: string

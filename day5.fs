@@ -1,13 +1,11 @@
 module Day5.Part1
 
-open System
 open System.IO
 
 
 let rawInput =
     File.ReadAllLines("input/input5.txt")
     |> Array.toList
-
 
 
 type Seeds = { Name: string; Values: int64 list }
@@ -33,7 +31,6 @@ let getTitleFromInt index =
     | 6 -> "temperature-to-humidity map:"
     | 7 -> "humidity-to-location map:"
     | _ -> ""
-
 
 
 let extractMapData (data: string list list) (index: int) =
@@ -157,4 +154,4 @@ let calculateScore (maps: Maps) : int64 =
     |> List.min
 
 
-rawInput |> parseInput |> calculateScore
+let solve = rawInput |> parseInput |> calculateScore

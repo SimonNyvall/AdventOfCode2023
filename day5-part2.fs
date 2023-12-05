@@ -9,7 +9,6 @@ let rawInput =
     |> Array.toList
 
 
-
 type Seeds = { Name: string; Values: int64 list }
 
 
@@ -33,7 +32,6 @@ let getTitleFromInt index =
     | 6 -> "temperature-to-humidity map:"
     | 7 -> "humidity-to-location map:"
     | _ -> ""
-
 
 
 let extractMapData (data: string list list) (index: int) =

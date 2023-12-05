@@ -1,7 +1,7 @@
 module Day4.Part2
 
-open System
 open System.IO
+
 
 type Card =
     { CardIndex: int
@@ -15,7 +15,11 @@ let input =
 
 
 let parseCard (line: string) =
-    let cardIndex = line.Split(':').[0].Trim().Split(' ') |> Array.filter (fun x -> x <> "") |> Array.last |> int
+    let cardIndex =
+        line.Split(':').[0].Trim().Split(' ')
+        |> Array.filter (fun x -> x <> "")
+        |> Array.last
+        |> int
 
     let winningNumbers =
         line.Split(':').[1].Split('|').[0].Trim().Split(' ').[0..]
@@ -41,51 +45,45 @@ let points (card: Card) =
 type CardId = int
 
 
-type State = {
-    Cards: Map<CardId, Card>
-    NumberOfCopies: Map<CardId, int>
-}
+type State =
+    { Cards: Map<CardId, Card>
+      NumberOfCopies: Map<CardId, int> }
 
 
 let Solve =
-  let parsed =
-    input
-    |> List.map parseCard
-
-  
-  let initalState =
-    { Cards = 
-        parsed 
-        |> List.map (fun c -> (c.CardIndex, c))
-        |> Map.ofList
-      NumberOfCopies =
-        parsed
-        |> List.map (fun c -> (c.CardIndex, 1))
-        |> Map.ofSeq }
+    let parsed = input |> List.map parseCard
 
 
-  let scoreAndCopy (state: State) card =
-    let p = points card
-    let nbCopies = state.NumberOfCopies |> Map.find card.CardIndex
-
-    let idsToCopy = [ (card.CardIndex + 1) .. (card.CardIndex + p) ]
-
-    let bumpCount (state: State) id =
-      {state with
+    let initalState =
+        { Cards =
+            parsed
+            |> List.map (fun c -> (c.CardIndex, c))
+            |> Map.ofList
           NumberOfCopies =
-              state.NumberOfCopies
-              |> Map.change id (fun (Some count) -> Some(count + nbCopies))}
+            parsed
+            |> List.map (fun c -> (c.CardIndex, 1))
+            |> Map.ofSeq }
 
-    let newCounts =
-      idsToCopy
-      |> List.fold bumpCount state
-      
 
-    newCounts
+    let scoreAndCopy (state: State) card =
+        let p = points card
+        let nbCopies = state.NumberOfCopies |> Map.find card.CardIndex
 
-  let folded = parsed |> List.fold scoreAndCopy initalState
+        let idsToCopy = [ (card.CardIndex + 1) .. (card.CardIndex + p) ]
 
-  folded.NumberOfCopies
-  |> Map.toList
-  |> List.sumBy snd
+        let bumpCount (state: State) id =
+            { state with
+                NumberOfCopies =
+                    state.NumberOfCopies
+                    |> Map.change id (fun (Some count) -> Some(count + nbCopies)) }
 
+        let newCounts = idsToCopy |> List.fold bumpCount state
+
+
+        newCounts
+
+    let folded = parsed |> List.fold scoreAndCopy initalState
+
+    folded.NumberOfCopies
+    |> Map.toList
+    |> List.sumBy snd

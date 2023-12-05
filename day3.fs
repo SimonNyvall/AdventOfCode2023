@@ -1,8 +1,10 @@
 module day3
 
+
 let input =
     System.IO.File.ReadAllLines $"""input/input3.txt"""
     |> List.ofSeq
+
 
 let example =
     """467..114..
@@ -19,12 +21,15 @@ let example =
     |> Array.map (fun s -> s.Trim())
     |> List.ofSeq
 
+
 type Location = int * int
+
 
 type Entry =
     | Digit of string
     | Symbol of char
     | Empty
+
 
 let parse input =
     let parseCharacter =
@@ -39,12 +44,15 @@ let parse input =
 
     parsed
 
+
 type Bundle =
     | Empty
     | Symbol of char
     | Number of int
 
+
 let digit (Digit d) = d
+
 
 let rec bundle (line: (Location * Entry) list) : (Location list * Bundle) list =
     match line with
@@ -77,6 +85,7 @@ let rec bundle (line: (Location * Entry) list) : (Location list * Bundle) list =
 
         entry :: (bundle t)
 
+
 let numbers bundled =
     bundled
     |> List.choose (fun (loc, d) ->
@@ -84,12 +93,14 @@ let numbers bundled =
         | Number n -> Some(n, loc)
         | _ -> None)
 
+
 let symbols bundled =
     bundled
     |> List.filter (fun (loc, d) ->
         match d with
         | Symbol _ -> true
         | _ -> false)
+
 
 let hasNeighbourIn locations (x, y) =
     let neighbs =
@@ -106,9 +117,11 @@ let hasNeighbourIn locations (x, y) =
     |> Set.isEmpty
     |> not
 
+
 let isPartNumber symbolLocations (_, locations) =
     locations
     |> List.exists (hasNeighbourIn symbolLocations)
+
 
 let solve input =
     let bundled = input |> parse |> List.collect bundle
@@ -124,7 +137,3 @@ let solve input =
     result
 
 solve input
-
-// .....
-// .633.
-// .#...

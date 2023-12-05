@@ -1,8 +1,10 @@
 module Day3.Part2
 
+
 let input =
     System.IO.File.ReadAllLines $"""input/input3.txt"""
     |> List.ofSeq
+
 
 let example =
     """467..114..
@@ -19,12 +21,15 @@ let example =
     |> Array.map (fun s -> s.Trim())
     |> List.ofSeq
 
+
 type Location = int * int
+
 
 type Entry =
     | Digit of string
     | Symbol of char
     | Empty
+
 
 let parse input =
     let parseCharacter =
@@ -39,12 +44,15 @@ let parse input =
 
     parsed
 
+
 type Bundle =
     | Empty
     | Symbol of char
     | Number of int
 
+
 let digit (Digit d) = d
+
 
 let rec bundle (line: (Location * Entry) list) : (Location list * Bundle) list =
     match line with
@@ -77,12 +85,14 @@ let rec bundle (line: (Location * Entry) list) : (Location list * Bundle) list =
 
         entry :: (bundle t)
 
+
 let numbers bundled =
     bundled
     |> List.choose (fun (loc, d) ->
         match d with
         | Number n -> Some(n, loc)
         | _ -> None)
+
 
 let symbols bundled =
     bundled
@@ -91,6 +101,7 @@ let symbols bundled =
         | Symbol _ -> true
         | _ -> false)
 
+
 let gearLocation bundled =
     bundled
     |> List.choose (fun (loc, d) ->
@@ -98,6 +109,7 @@ let gearLocation bundled =
         | Symbol '*' -> Some loc
         | _ -> None)
     |> List.collect id
+
 
 let hasNeighbourIn locations (x, y) =
     let neighbs =
@@ -114,18 +126,19 @@ let hasNeighbourIn locations (x, y) =
     |> Set.isEmpty
     |> not
 
+
 let isPartNumber symbolLocations (_, locations) =
     locations
     |> List.exists (hasNeighbourIn symbolLocations)
 
-    
-let overlaps locs (_, numberLocs) = 
+
+let overlaps locs (_, numberLocs) =
     Set.intersect (Set.ofList locs) (Set.ofList numberLocs)
     |> Set.isEmpty
     |> not
 
 
-let neighbouringPartNumbers partNumbers (x, y) = 
+let neighbouringPartNumbers partNumbers (x, y) =
     let neighbs =
         [ (x - 1, y - 1)
           (x, y - 1)
@@ -150,28 +163,25 @@ let solve input =
         numberss
         |> List.filter (isPartNumber symbolLocations)
 
-    let possibleGearLocations =
-      gearLocation bundled
+    let possibleGearLocations = gearLocation bundled
 
     let withNumbers =
-      possibleGearLocations
-      |> List.map (fun gl -> gl, neighbouringPartNumbers partNumbers gl)
+        possibleGearLocations
+        |> List.map (fun gl -> gl, neighbouringPartNumbers partNumbers gl)
 
 
     let actualGears =
-      withNumbers
-      |> List.filter (fun (gl, other) -> 2 = (other |> Seq.length))
+        withNumbers
+        |> List.filter (fun (gl, other) -> 2 = (other |> Seq.length))
 
 
     let ratios =
-      actualGears
-      |> List.map snd
-      |> List.map (fun numbers -> numbers |> List.map fst |> List.reduce (*))
+        actualGears
+        |> List.map snd
+        |> List.map (fun numbers -> numbers |> List.map fst |> List.reduce (*))
 
 
-    let ratioSum =
-      ratios
-      |> List.sum
+    let ratioSum = ratios |> List.sum
 
 
     ratioSum
@@ -179,5 +189,3 @@ let solve input =
 
 
 solve input
-
-

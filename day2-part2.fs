@@ -8,13 +8,15 @@ type Color =
     | Green
     | Blue
 
+
 type Round = { CubeCount: int; Color: Color }
 
-type Game = { 
-    Rounds: Round list list
-}
+
+type Game = { Rounds: Round list list }
+
 
 let readInputFile = File.ReadAllLines("input/input2.txt")
+
 
 let parseColor (colorStr: string) : Color =
     match colorStr.Trim().ToLower() with
@@ -22,6 +24,7 @@ let parseColor (colorStr: string) : Color =
     | "green" -> Green
     | "blue" -> Blue
     | _ -> failwith "Invalid color"
+
 
 let parseRound (roundStr: string) : Round list =
     roundStr.Split(',')
@@ -32,7 +35,7 @@ let parseRound (roundStr: string) : Round list =
         { CubeCount = cubeCount; Color = color })
     |> Array.toList
 
- 
+
 let parseGame (games: string []) =
     games
     |> Array.map (fun gameStr ->
@@ -43,9 +46,24 @@ let parseGame (games: string []) =
 
 
 let maxCubesPerColor (rounds: Round list) : int * int * int =
-    let redMax = rounds |> List.filter (fun r -> r.Color = Red) |> List.maxBy (fun r -> r.CubeCount) |> fun r -> r.CubeCount
-    let greenMax = rounds |> List.filter (fun r -> r.Color = Green) |> List.maxBy (fun r -> r.CubeCount) |> fun r -> r.CubeCount
-    let blueMax = rounds |> List.filter (fun r -> r.Color = Blue) |> List.maxBy (fun r -> r.CubeCount) |> fun r -> r.CubeCount
+    let redMax =
+        rounds
+        |> List.filter (fun r -> r.Color = Red)
+        |> List.maxBy (fun r -> r.CubeCount)
+        |> fun r -> r.CubeCount
+
+    let greenMax =
+        rounds
+        |> List.filter (fun r -> r.Color = Green)
+        |> List.maxBy (fun r -> r.CubeCount)
+        |> fun r -> r.CubeCount
+
+    let blueMax =
+        rounds
+        |> List.filter (fun r -> r.Color = Blue)
+        |> List.maxBy (fun r -> r.CubeCount)
+        |> fun r -> r.CubeCount
+
     (redMax, greenMax, blueMax)
 
 
@@ -59,5 +77,4 @@ let sumOfPowers (games: Game array) : int =
 
 
 let games = parseGame readInputFile
-let totalPower = sumOfPowers games
-totalPower
+let solve = sumOfPowers games

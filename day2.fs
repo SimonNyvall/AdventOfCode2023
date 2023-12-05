@@ -8,13 +8,17 @@ type Color =
     | Green
     | Blue
 
+
 type Round = { CubeCount: int; Color: Color }
+
 
 type Game =
     { GameIndex: string
       Rounds: Round list }
 
+
 let readInputFile = File.ReadAllLines("input/input2.txt")
+
 
 let parseColor (colorStr: string) : Color =
     match colorStr.Trim().ToLower() with
@@ -22,6 +26,7 @@ let parseColor (colorStr: string) : Color =
     | "green" -> Green
     | "blue" -> Blue
     | _ -> failwith "Invalid color"
+
 
 let parseRound (roundStr: string) : Round list =
     roundStr.Split(',')
@@ -31,6 +36,7 @@ let parseRound (roundStr: string) : Round list =
         let color = parseColor parts.[1]
         { CubeCount = cubeCount; Color = color })
     |> Array.toList
+
 
 let parseGame (games: string []) : Game list =
     games
@@ -45,10 +51,12 @@ let parseGame (games: string []) : Game list =
           Rounds = parsedRounds })
     |> Array.toList
 
+
 let playAmount: Round list =
     [ { CubeCount = 12; Color = Red }
       { CubeCount = 13; Color = Green }
       { CubeCount = 14; Color = Blue } ]
+
 
 let gamesPossibleToPlay (games: Game list) : Game list =
     let getPlayAmountOfColor (color: Color) : int =
@@ -67,14 +75,14 @@ let gamesPossibleToPlay (games: Game list) : Game list =
             | Green -> round.CubeCount <= getPlayAmountOfColor Green
             | Blue -> round.CubeCount <= getPlayAmountOfColor Blue))
 
+
 let sumGameIndexes (games: Game list) : int =
     games
     |> List.sumBy (fun game ->
         let idStr = game.GameIndex.Split(' ')[1]
         int idStr)
 
+
 let parsedGames = parseGame readInputFile
 let possibleGames = gamesPossibleToPlay parsedGames
-let sumOfGameIndexes = sumGameIndexes possibleGames
-
-printfn "Sum of Game Indexes: %d" sumOfGameIndexes
+let solve = sumGameIndexes possibleGames

@@ -7,7 +7,6 @@ open System.Text.RegularExpressions
 let readtextfile = File.ReadAllLines("input/input1.txt")
 
 
-
 let findTextDigites (line: string) =
     let regex = Regex("(?=(one|two|three|four|five|six|seven|eight|nine|[1-9]))")
     let matches = regex.Matches line
@@ -18,6 +17,7 @@ let findTextDigites (line: string) =
             results.Add(isMatch.Groups.[1].Value)
 
     results.ToArray()
+
 
 let textDigitMap =
     dict [ "one", "1"
@@ -60,9 +60,9 @@ let result (arr: Option<string * string> []) =
     |> Array.sum
 
 
-
-readtextfile
-|> Array.map findTextDigites
-|> Array.map convertTextToDigits
-|> Array.map findFirstAndLastDigits
-|> result
+let solve =
+    readtextfile
+    |> Array.map findTextDigites
+    |> Array.map convertTextToDigits
+    |> Array.map findFirstAndLastDigits
+    |> result
