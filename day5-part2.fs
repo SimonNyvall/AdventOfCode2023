@@ -182,4 +182,4 @@ let maps = rawInput |> parseInput
 let seedRanges = rawInput |> parseSeedRanges
 
 
-calculateLowestLocation maps seedRanges
+let solve = calculateLowestLocation maps seedRanges
