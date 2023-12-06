@@ -1,4 +1,4 @@
-module Day6
+module Day6.Part1
 
 open System
 open System.IO
