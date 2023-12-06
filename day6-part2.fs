@@ -1,5 +1,6 @@
 module Day6
 
+open System
 open System.IO
 
 
@@ -48,26 +49,28 @@ let parseInput (input: string list) =
       Distance = int64 distance }
 
 
-let holdTimeOptions (holdTime: int64) : int64 list = [ 0..holdTime ]
+let calculateWinningWays (race: Race) =
+    let a = 1 |> float
+    let b = -race.Time |> float
+    let c = race.Distance |> float
 
+    let discriminant = b * b - 4.0 * a * c
 
-let calculateRaceOptions (race: Race) =
+    let root1 =
+        (-b + Math.Sqrt(float discriminant))
+        / (2. * float a)
 
-    let outcomes = holdTimeOptions race.Time
-    let lastElement = outcomes |> List.rev |> List.head
+    let root2 =
+        (-b - Math.Sqrt(float discriminant))
+        / (2. * float a)
 
-    let outcomeList =
-        outcomes
-        |> List.map (fun holdTime -> holdTime * (lastElement - holdTime))
+    let lowerBound = Math.Ceiling(root2)
+    let upperBound = Math.Floor(root1)
 
-    { Race = race; Outcome = outcomeList }
-
-
-let result (race: RaceOption) =
-    let raceDistance = race.Race.Distance
-
-    race.Outcome
-    |> List.filter (fun outcome -> outcome > raceDistance)
+    if lowerBound > upperBound then
+        0
+    else
+        int (upperBound - lowerBound + 1.0)
 
 
 let solve =
@@ -76,6 +79,4 @@ let solve =
     |> List.map (fun s -> s.Trim())
     |> List.filter (fun s -> s <> "")
     |> parseInput
-    |> calculateRaceOptions
-    |> result
-    |> List.length
+    |> calculateWinningWays
