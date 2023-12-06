@@ -2,6 +2,7 @@ module Day5.Part2
 
 open System
 open System.IO
+open System.Threading.Tasks
 
 
 let rawInput =
@@ -153,14 +154,15 @@ let calculateLowestLocation (maps: Maps) (seedRanges: (int64 * int64) list) : in
         let humidity = convertNumber maps.TemperatureToHumidity temperature
         convertNumber maps.HumidityToLocation humidity
 
-    let mutable lowestLocation = Int64.MaxValue
+    let seedNumbers =
+        seedRanges
+        |> List.collect (fun (start, count) -> [ start .. start + count - 1L ])
+        |> Array.ofList
 
-    for (start, count) in seedRanges do
-        for seed in [ start .. start + count - 1L ] do
-            let location = convertSeed seed
+    let lowestLocation =
+        Array.Parallel.map convertSeed seedNumbers
+        |> Array.min
 
-            if location < lowestLocation then
-                lowestLocation <- location
 
     lowestLocation
 
