@@ -42,7 +42,7 @@ let cardStrength card isJoker =
     | 'J' when not isJoker -> 11
     | 'T' -> 10
     | _ when '2' <= card && card <= '9' -> int card - int '0'
-    | 'J' -> 1 // Joker is weakest when not acting as a wildcard
+    | 'J' -> 1
     | _ -> 0
 
 
@@ -171,6 +171,13 @@ let calculateWinnings (players: (int * Player) list) =
     |> List.sum
 
 
+let solve =
+    example
+    |> parseHand
+    |> rankHands
+    |> calculateWinnings
+
+(*
 let sovle =
     File.ReadAllLines("input/input7.txt")
     |> Array.toList
@@ -178,3 +185,5 @@ let sovle =
     |> parseHand
     |> rankHands
     |> calculateWinnings
+
+    *)
