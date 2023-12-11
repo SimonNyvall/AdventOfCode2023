@@ -1,3 +1,3 @@
-﻿open Day9
+﻿open Day11
 
-sovle
+solve |> printfn "Part 1: %d"
