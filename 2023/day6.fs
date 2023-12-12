@@ -86,3 +86,4 @@ let solve =
     |> parseInput
     |> List.map calculateWinningWays
     |> List.fold (*) 1
+    |> printfn "%d"

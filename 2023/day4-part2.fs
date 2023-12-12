@@ -87,3 +87,5 @@ let Solve =
     folded.NumberOfCopies
     |> Map.toList
     |> List.sumBy snd
+
+Solve |> printfn "%A"

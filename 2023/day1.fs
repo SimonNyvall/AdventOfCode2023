@@ -4,7 +4,7 @@ open System
 open System.IO
 
 let readtextfile =
-    File.ReadAllLines("input/input1.txt")
+    File.ReadAllLines("2023/input/input1.txt")
     |> Array.rev
     |> Array.skip 1
     |> Array.rev
@@ -31,4 +31,4 @@ let parseAndSum fileLines =
     fileLines |> Array.map parseLine |> Array.sum
 
 
-let solve = readtextfile |> parseAndSum
+let solve = readtextfile |> parseAndSum |> printfn "%d"

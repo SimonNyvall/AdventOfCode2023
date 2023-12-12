@@ -85,4 +85,4 @@ let sumGameIndexes (games: Game list) : int =
 
 let parsedGames = parseGame readInputFile
 let possibleGames = gamesPossibleToPlay parsedGames
-let solve = sumGameIndexes possibleGames
+let solve = sumGameIndexes possibleGames |> printfn "%d"

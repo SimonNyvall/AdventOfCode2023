@@ -1,4 +1,4 @@
-module Day11
+module Day11Part2
 
 let example =
     """
@@ -179,9 +179,4 @@ let input =
     |> Array.toList
 
 
-let solve =
-    input
-    |> expand
-    |> labelGalaxies
-    |> sumPathLengths
-    |> printfn "%d"
+let solve = input |> expand |> labelGalaxies |> sumPathLengths

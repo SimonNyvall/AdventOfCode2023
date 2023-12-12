@@ -176,14 +176,4 @@ let solve =
     |> parseHand
     |> rankHands
     |> calculateWinnings
-
-(*
-let sovle =
-    File.ReadAllLines("input/input7.txt")
-    |> Array.toList
-    |> List.map (fun s -> s.Split(' '))
-    |> parseHand
-    |> rankHands
-    |> calculateWinnings
-
-    *)
+    |> printfn "%A"

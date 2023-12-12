@@ -136,4 +136,4 @@ let solve input =
     let result = partNumbers |> List.sumBy fst
     result
 
-solve input
+solve input |> printfn "%d"

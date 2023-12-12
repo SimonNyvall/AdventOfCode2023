@@ -62,3 +62,4 @@ let Solve =
     |> List.map calculateCardScore
     |> List.sum
     |> int
+    |> printfn "%d"

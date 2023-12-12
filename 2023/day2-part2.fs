@@ -77,4 +77,4 @@ let sumOfPowers (games: Game array) : int =
 
 
 let games = parseGame readInputFile
-let solve = sumOfPowers games
+let solve = sumOfPowers games |> printfn "%d"

@@ -73,4 +73,4 @@ let sovle =
         List.map extrapolateNextValue parsedInput
         |> List.sum
 
-    result
+    result |> printfn "%d"

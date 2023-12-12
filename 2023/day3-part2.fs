@@ -188,4 +188,4 @@ let solve input =
 
 
 
-solve input
+solve input |> printfn "%d"

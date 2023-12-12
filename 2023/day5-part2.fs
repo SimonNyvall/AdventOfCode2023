@@ -182,4 +182,6 @@ let maps = rawInput |> parseInput
 let seedRanges = rawInput |> parseSeedRanges
 
 
-let solve = calculateLowestLocation maps seedRanges
+let solve =
+    calculateLowestLocation maps seedRanges
+    |> printfn "%d"

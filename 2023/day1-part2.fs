@@ -66,3 +66,4 @@ let solve =
     |> Array.map convertTextToDigits
     |> Array.map findFirstAndLastDigits
     |> result
+    |> printfn "%d"

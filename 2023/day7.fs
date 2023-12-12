@@ -125,3 +125,4 @@ let sovle =
     |> parseHand
     |> rankHands
     |> calculateWinnings
+    |> printfn "%d"

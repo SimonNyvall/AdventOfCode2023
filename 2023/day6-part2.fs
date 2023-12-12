@@ -80,3 +80,4 @@ let solve =
     |> List.filter (fun s -> s <> "")
     |> parseInput
     |> calculateWinningWays
+    |> printfn "%d"

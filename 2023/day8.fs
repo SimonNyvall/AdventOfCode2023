@@ -96,4 +96,4 @@ let solve =
         |> List.filter (fun s -> s <> "")
 
     let network = parseInput input
-    traverse network "AAA" 0 0
+    traverse network "AAA" 0 0 |> printfn "%A"

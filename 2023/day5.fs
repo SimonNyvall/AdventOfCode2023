@@ -154,4 +154,8 @@ let calculateScore (maps: Maps) : int64 =
     |> List.min
 
 
-let solve = rawInput |> parseInput |> calculateScore
+let solve =
+    rawInput
+    |> parseInput
+    |> calculateScore
+    |> printfn "%d"
